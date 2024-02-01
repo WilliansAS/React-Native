@@ -1,73 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import tw from 'twrnc';
 
 const App = () => {
-  const [task, setTask] = useState('');
-  const [taskList, setTaskList] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const addTask = () => {
-    if (task !== '') {
-      setTaskList([...taskList, task]);
-      setTask('');
-    }
-  };
-
-  const deleteTask = (index) => {
-    const newTaskList = [...taskList];
-    newTaskList.splice(index, 1);
-    setTaskList(newTaskList);
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Lista de Tareas</Text>
-      <TextInput
-        style={styles.input}
-        value={task}
-        onChangeText={(text) => setTask(text)}
-        placeholder="Nueva tarea"
-      />
-      <Button title="Agregar tarea" onPress={addTask} />
-      <FlatList
-        data={taskList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <View style={styles.taskItem}>
-            <Text>{item}</Text>
-            <Button title="Eliminar" onPress={() => deleteTask(index)} />
-          </View>
-        )}
-      />
+    <View style={[tw`flex-1 justify-center items-center`, darkMode ? tw`bg-gray-900` : tw`bg-white`]}>
+      <View style={[tw`w-full max-w-xs overflow-hidden rounded-lg shadow-lg`, darkMode ? tw`bg-gray-800` : tw`bg-white`]}>
+        <Image
+          style={tw`w-full h-56`}
+          source={{uri: 'https://i.pinimg.com/564x/38/ae/8d/38ae8d4b48a93580cef2292cc776ca7a.jpg'}}
+        />
+
+        <View style={tw`py-5 items-center`}>
+          <Text style={darkMode ? tw`text-xl font-bold text-white` : tw`text-xl font-bold text-gray-800`}>Anthony Willians</Text>
+          <Text style={darkMode ? tw`text-sm text-gray-200` : tw`text-sm text-gray-700`}>Ingeniero De Software</Text>
+        </View>
+
+        <View style={tw`items-center`}>
+          <TouchableOpacity onPress={toggleDarkMode} style={tw`bg-blue-500 px-4 py-2 rounded-md mb-4`}>
+            <Text style={tw`text-white`}>Cambiar fondo</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    marginTop: 30,
-  },
-  input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  taskItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 10,
-  },
-});
 
 export default App;
